@@ -1,11 +1,12 @@
-import java.time.LocalDate
+import de.griefed.serverpackcreator.gui.filebrowser.FileBrowser
+import de.griefed.serverpackcreator.gui.window.MainWindow
+import javax.swing.JTextField
+import javax.swing.SwingUtilities
 
-fun main(args: Array<String>) {
-    println("Hello World!")
-
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
-    println(System.getProperty("user.home"))
-    println(LocalDate.now())
+fun main() {
+    val textField1 = JTextField(
+        "C:\\Minecraft\\Game\\Instances\\Survive Create Prosper 4"
+    )
+    SwingUtilities.invokeLater(FileBrowser(textField1))
+    SwingUtilities.invokeLater(MainWindow())
 }
