@@ -4,6 +4,6 @@ import de.griefed.serverpackcreator.gui.window.components.TabPanel
 
 class Configs : TabPanel() {
     init {
-        tabs.addTab("Config 1",PackConfig().panel)
+        tabs.addTab("Config 1", ConfigEditor().panel)
     }
 }
