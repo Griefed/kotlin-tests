@@ -10,12 +10,12 @@ class MainFrame {
 
     init {
         mainFrame.jMenuBar = MainMenu().menuBar
-        mainFrame.contentPane.add(JScrollPane(MainPanel().panel))
+        mainFrame.contentPane.add(MainPanel().scroll)
         mainFrame.pack()
         mainFrame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         mainFrame.isLocationByPlatform = true
-        mainFrame.setSize(800,500)
+        mainFrame.setSize(1200,800)
         mainFrame.isVisible = true
-
+        mainFrame.isAutoRequestFocus = true
     }
 }

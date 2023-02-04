@@ -22,6 +22,7 @@ dependencies {
     implementation("com.formdev:flatlaf-fonts-jetbrains-mono:2.242")
     implementation("com.miglayout:miglayout-swing:11.0")
     implementation("com.miglayout:miglayout-swt:11.0")
+    implementation("com.formdev:svgSalamander:1.1.4")
     implementation("de.griefed:larsonscanner:1.0.4")
 
     implementation("org.apache.logging.log4j:log4j-api-kotlin:1.2.0")

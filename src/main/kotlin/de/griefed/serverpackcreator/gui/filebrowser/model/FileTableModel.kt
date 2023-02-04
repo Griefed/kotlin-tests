@@ -50,14 +50,14 @@ class FileTableModel : AbstractTableModel() {
 
     fun addRow(model: FileBrowserModel, fileNode: FileNode) {
         val file = fileNode.file
-        val list: MutableList<Any?> = ArrayList()
+        val list: MutableList<Any> = ArrayList()
         list.add(model.getFileIcon(file))
         list.add(model.getFileText(file))
         list.add(file.length())
         list.add(Date(file.lastModified()))
         list.add(file.canRead())
         list.add(fileNode)
-        rows.add(listOf(list))
+        rows.add(list)
     }
 
     fun removeRows() {
@@ -78,8 +78,7 @@ class FileTableModel : AbstractTableModel() {
 
     private fun setColumnWidth(table: JTable, column: Int, width: Int): Int {
         var columnWidth = width
-        val tableColumn: TableColumn = table.columnModel
-            .getColumn(column)
+        val tableColumn: TableColumn = table.columnModel.getColumn(column)
         val label = JLabel(tableColumn.headerValue as String)
         val preferred: Dimension = label.preferredSize
         columnWidth = columnWidth.coerceAtLeast(preferred.getWidth().toInt() + 14)

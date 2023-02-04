@@ -88,6 +88,7 @@ cwallet.sso.lck
 .idea/**/dictionaries
 .idea/**/shelf
 
+
 # AWS User-specific
 .idea/**/aws.xml
 

@@ -6,11 +6,13 @@ import de.griefed.serverpackcreator.gui.window.logs.Logs
 import de.griefed.serverpackcreator.gui.window.settings.SettingsEditor
 import net.miginfocom.swing.MigLayout
 import javax.swing.JPanel
+import javax.swing.JScrollPane
 import javax.swing.JTabbedPane
 
 class MainPanel {
     val panel = JPanel()
     val tabs = JTabbedPane()
+    val scroll = JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED)
 
     init {
         tabs.addTab("Configs", Configs().panel)
@@ -23,5 +25,6 @@ class MainPanel {
         )
         panel.add(tabs,"grow,push")
         panel.add(LarsonScanner(),"south,height 40!")
+        scroll.verticalScrollBar.unitIncrement = 5
     }
 }
