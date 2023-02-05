@@ -1,5 +1,7 @@
 package de.griefed.serverpackcreator.gui.filebrowser
 
+import com.formdev.flatlaf.FlatLaf
+import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme
 import de.griefed.serverpackcreator.gui.filebrowser.model.FileBrowserModel
 import de.griefed.serverpackcreator.gui.filebrowser.view.FileBrowserFrame
@@ -11,7 +13,13 @@ class FileBrowser(
     private val model: FileBrowserModel
 
     init {
-        setLookAndFeel()
+        FlatJetBrainsMonoFont.install()
+        FlatLaf.setPreferredFontFamily(FlatJetBrainsMonoFont.FAMILY)
+        try {
+            FlatDarkPurpleIJTheme.setup()
+        } catch (weTried: Exception) {
+            weTried.printStackTrace()
+        }
         model = FileBrowserModel()
     }
 
@@ -21,13 +29,5 @@ class FileBrowser(
 
     override fun run() {
         FileBrowserFrame(model, field)
-    }
-
-    private fun setLookAndFeel() {
-        try {
-            FlatDarkPurpleIJTheme.setup()
-        } catch (weTried: Exception) {
-            weTried.printStackTrace()
-        }
     }
 }

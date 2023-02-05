@@ -21,7 +21,6 @@ dependencies {
     implementation("com.formdev:flatlaf-fonts-roboto-mono:3.000")
     implementation("com.formdev:flatlaf-fonts-jetbrains-mono:2.242")
     implementation("com.miglayout:miglayout-swing:11.0")
-    implementation("com.miglayout:miglayout-swt:11.0")
     implementation("com.formdev:svgSalamander:1.1.4")
     implementation("de.griefed:larsonscanner:1.0.4")
 

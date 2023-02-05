@@ -1,97 +1,128 @@
 package de.griefed.serverpackcreator.gui.window.components
 
-import java.awt.*
-import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
-import java.awt.font.FontRenderContext
-import java.awt.font.LineMetrics
-import javax.swing.JLabel
+import java.awt.BorderLayout
+import java.awt.Component
+import java.awt.FontMetrics
+import java.awt.Rectangle
+import java.awt.event.*
+import javax.swing.BorderFactory
 import javax.swing.JPanel
+import javax.swing.border.Border
+import javax.swing.border.TitledBorder
 
-internal class CollapsablePanel(val text: String, var contentPanel: JPanel) : JPanel(GridBagLayout()) {
-    private var selected: Boolean
-    private var headerPanel: HeaderPanel
+
+/**
+ * [CodeRanch Expand-Collapse-Panels](https://coderanch.com/t/341737/java/Expand-Collapse-Panels)
+ * @author rgd
+ */
+class CollapsiblePanel(
+    private var title: String = "Collapsible Panel",
+    private var border: TitledBorder = BorderFactory.createTitledBorder(title)
+) : JPanel() {
+
+    private var titleListener: MouseAdapter = object : MouseAdapter() {
+        override fun mouseClicked(e: MouseEvent) {
+            val border: Border = getBorder()
+            if (border is TitledBorder) {
+                val fm: FontMetrics = getFontMetrics(font)
+                val titleWidth = fm.stringWidth(border.title) + 20
+                val bounds = Rectangle(0, 0, titleWidth, fm.height)
+                if (bounds.contains(e.point)) {
+                    toggleVisibility()
+                }
+            }
+        }
+    }
+
+    private var contentComponentListener: ComponentListener = object : ComponentAdapter() {
+        override fun componentShown(e: ComponentEvent) {
+            updateBorderTitle()
+        }
+
+        override fun componentHidden(e: ComponentEvent) {
+            updateBorderTitle()
+        }
+    }
 
     init {
-        val gbc = GridBagConstraints()
-        gbc.insets = Insets(1, 3, 0, 3)
-        gbc.weightx = 1.0
-        gbc.fill = GridBagConstraints.HORIZONTAL
-        gbc.gridwidth = GridBagConstraints.REMAINDER
-        selected = false
-        headerPanel = HeaderPanel()
-        background = Color(200, 200, 220)
-        add(headerPanel, gbc)
-        add(contentPanel, gbc)
-        contentPanel.isVisible = false
-        val padding = JLabel()
-        gbc.weighty = 1.0
-        add(padding, gbc)
+        setBorder(border)
+        layout = BorderLayout()
+        addMouseListener(titleListener)
     }
 
-    fun toggleSelection() {
-        selected = !selected
-        contentPanel.isVisible = !contentPanel.isShowing
-        validate()
-        headerPanel.repaint()
+    override fun add(comp: Component): Component {
+        comp.addComponentListener(contentComponentListener)
+        val r = super.add(comp)
+        updateBorderTitle()
+        return r
     }
 
-    inner class HeaderPanel : JPanel(), MouseListener {
+    override fun add(name: String, comp: Component): Component {
+        comp.addComponentListener(contentComponentListener)
+        val r = super.add(name, comp)
+        updateBorderTitle()
+        return r
+    }
 
-        /*var open: BufferedImage? = null
-        var closed: BufferedImage? = null*/
-        val OFFSET = 30
-        //val PAD = 5
+    override fun add(comp: Component, index: Int): Component {
+        comp.addComponentListener(contentComponentListener)
+        val r = super.add(comp, index)
+        updateBorderTitle()
+        return r
+    }
 
-        init {
-            addMouseListener(this)
-            preferredSize = Dimension(200, 20)
-            font = Font("sans-serif", Font.PLAIN, 12)
+    override fun add(comp: Component, constraints: Any) {
+        comp.addComponentListener(contentComponentListener)
+        super.add(comp, constraints)
+        updateBorderTitle()
+    }
 
-            /*
-            val w: Int = width
-            val h: Int = height
+    override fun add(comp: Component, constraints: Any, index: Int) {
+        comp.addComponentListener(contentComponentListener)
+        super.add(comp, constraints, index)
+        updateBorderTitle()
+    }
 
-            try {
-                open = ImageIO.read(new File("images/arrow_down_mini.png"));
-                closed = ImageIO.read(new File("images/arrow_right_mini.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
+    override fun remove(index: Int) {
+        val comp = getComponent(index)
+        comp.removeComponentListener(contentComponentListener)
+        super.remove(index)
+    }
+
+    override fun remove(comp: Component) {
+        comp.removeComponentListener(contentComponentListener)
+        super.remove(comp)
+    }
+
+    override fun removeAll() {
+        for (c in components) {
+            c.removeComponentListener(contentComponentListener)
+        }
+        super.removeAll()
+    }
+
+    fun toggleVisibility(visible: Boolean = hasInvisibleComponent()) {
+        for (c in components) {
+            c.isVisible = visible
+        }
+        updateBorderTitle()
+    }
+
+    fun updateBorderTitle() {
+        var arrow = ""
+        if (componentCount > 0) {
+            arrow = if (hasInvisibleComponent()) "▽" else "△"
+        }
+        border.title = "$title $arrow"
+        repaint()
+    }
+
+    private fun hasInvisibleComponent(): Boolean {
+        for (c in components) {
+            if (!c.isVisible) {
+                return true
             }
-            */
         }
-
-        override fun paintComponent(g: Graphics) {
-            super.paintComponent(g)
-            val g2: Graphics2D = g as Graphics2D
-            g2.setRenderingHint(
-                RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON
-            )
-            val h: Int = height
-
-            /* Uncomment once you have your own images
-            if (selected)
-                g2.drawImage(open, PAD, 0, h, h, this);
-            else
-                g2.drawImage(closed, PAD, 0, h, h, this);
-            */
-            g2.font = font
-            val frc: FontRenderContext = g2.fontRenderContext
-            val lm: LineMetrics = font.getLineMetrics(text, frc)
-            val height: Float = lm.ascent + lm.descent
-            val x = OFFSET.toFloat()
-            val y: Float = (h + height) / 2 - lm.descent
-            g2.drawString(text, x, y)
-        }
-
-        override fun mouseClicked(e: MouseEvent?) {
-            toggleSelection()
-        }
-
-        override fun mouseEntered(e: MouseEvent?) {}
-        override fun mouseExited(e: MouseEvent?) {}
-        override fun mousePressed(e: MouseEvent?) {}
-        override fun mouseReleased(e: MouseEvent?) {}
+        return false
     }
 }

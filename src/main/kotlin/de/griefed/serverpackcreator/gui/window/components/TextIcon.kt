@@ -63,7 +63,7 @@ import kotlin.math.roundToInt
  */
 class TextIcon constructor(
     private val component: JComponent,
-    private var text: String?,
+    private var text: String,
     private val layout: Layout = Layout.HORIZONTAL
 ) : Icon, PropertyChangeListener {
     private var font: Font? = null
@@ -138,7 +138,7 @@ class TextIcon constructor(
      *
      * @param text The text to be rendered on the Icon
      */
-    private fun setText(text: String?) {
+    private fun setText(text: String) {
         this.text = text
         calculateIconDimensions()
     }

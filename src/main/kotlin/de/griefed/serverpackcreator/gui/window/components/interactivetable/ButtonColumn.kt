@@ -1,5 +1,7 @@
-package de.griefed.serverpackcreator.gui.window.components.scripttable
+package de.griefed.serverpackcreator.gui.window.components.interactivetable
 
+import com.formdev.flatlaf.icons.FlatClearIcon
+import com.kitfox.svg.app.beans.SVGIcon
 import de.griefed.serverpackcreator.gui.window.components.getScaledInstance
 import java.awt.Color
 import java.awt.Component

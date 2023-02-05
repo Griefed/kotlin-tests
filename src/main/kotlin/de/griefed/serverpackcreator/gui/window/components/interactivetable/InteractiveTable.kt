@@ -17,7 +17,7 @@
  *
  * The full license can be found at https:github.com/Griefed/ServerPackCreator/blob/main/LICENSE
  */
-package de.griefed.serverpackcreator.gui.window.components.scripttable
+package de.griefed.serverpackcreator.gui.window.components.interactivetable
 
 import org.apache.logging.log4j.kotlin.cachedLoggerOf
 import java.awt.Component
@@ -50,7 +50,7 @@ import javax.swing.text.JTextComponent
  * @author Griefed
  */
 @Suppress("unused")
-class ScriptTable(
+class InteractiveTable(
     tableModel: TableModel,
     tableColumnModel: TableColumnModel?,
     listSelectionModel: ListSelectionModel?
@@ -79,6 +79,8 @@ class ScriptTable(
     )
 
     init {
+        setShowGrid(true)
+        setRowHeight(25)
         try {
             ButtonColumn(this, 2,ButtonColumn.ColumnType.CLEAR)
             ButtonColumn(this, 3,ButtonColumn.ColumnType.DELETE)
