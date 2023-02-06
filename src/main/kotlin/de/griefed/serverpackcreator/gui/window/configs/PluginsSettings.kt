@@ -1,7 +1,5 @@
 package de.griefed.serverpackcreator.gui.window.configs
 
-import de.griefed.serverpackcreator.gui.window.components.ScrollTextArea
-import de.griefed.serverpackcreator.gui.window.components.interactivetable.InteractiveTable
 import net.miginfocom.swing.MigLayout
 import javax.swing.BorderFactory
 import javax.swing.JLabel
@@ -16,7 +14,7 @@ class PluginsSettings {
     init {
         panel.layout = MigLayout(
             "left,wrap",
-            "0[left,grow,push]0","30"
+            "0[left,grow,push]0", "30"
         )
 
         for (plugin in 0..5) {

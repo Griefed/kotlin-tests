@@ -66,44 +66,40 @@ class InteractiveTable(
     constructor() : this(
         DefaultTableModel(
             arrayOf<Any>(
-                "Variable",
+                "Key",
                 "Value",
-                "Clear",
-                "Delete",
-                "","","",""
+                "","","","","",""
             ),
-            10
+            1
         ),
         null,
         null
     )
 
     init {
-        setShowGrid(true)
         setRowHeight(25)
+        tableHeader.reorderingAllowed = false
         try {
-            ButtonColumn(this, 2,ButtonColumn.ColumnType.CLEAR)
-            ButtonColumn(this, 3,ButtonColumn.ColumnType.DELETE)
-            ButtonColumn(this, 4,ButtonColumn.ColumnType.ADD_BEFORE)
-            ButtonColumn(this, 5,ButtonColumn.ColumnType.ADD_AFTER)
-            ButtonColumn(this, 6,ButtonColumn.ColumnType.MOVE_UP)
-            ButtonColumn(this, 7,ButtonColumn.ColumnType.MOVE_DOWN)
+            ButtonColumns(this, 2,ButtonColumns.ColumnType.CLEAR)
+            ButtonColumns(this, 3,ButtonColumns.ColumnType.DELETE)
+            ButtonColumns(this, 4,ButtonColumns.ColumnType.ADD_BEFORE)
+            ButtonColumns(this, 5,ButtonColumns.ColumnType.ADD_AFTER)
+            ButtonColumns(this, 6,ButtonColumns.ColumnType.MOVE_UP)
+            ButtonColumns(this, 7,ButtonColumns.ColumnType.MOVE_DOWN)
         } catch (ex: IOException) {
             log.error("Couldn't create button column.", ex)
         }
         putClientProperty("terminateEditOnFocusLost", TRUE)
-        for (colum in 2..3) {
-            getColumnModel().getColumn(colum).minWidth = 60
-            getColumnModel().getColumn(colum).maxWidth = 60
-            getColumnModel().getColumn(colum).width = 60
-            getColumnModel().getColumn(colum).resizable = false
+        val sorter = TableRowSorter(this.model)
+        sorter.sortsOnUpdates = false
+        for (column in 2..7) {
+            getColumnModel().getColumn(column).minWidth = 30
+            getColumnModel().getColumn(column).maxWidth = 30
+            getColumnModel().getColumn(column).width = 30
+            getColumnModel().getColumn(column).resizable = false
+            sorter.setSortable(column, false)
         }
-        for (colum in 4..7) {
-            getColumnModel().getColumn(colum).minWidth = 30
-            getColumnModel().getColumn(colum).maxWidth = 30
-            getColumnModel().getColumn(colum).width = 30
-            getColumnModel().getColumn(colum).resizable = false
-        }
+        this.rowSorter = sorter
         scrollPanel = JScrollPane(this)
     }
 

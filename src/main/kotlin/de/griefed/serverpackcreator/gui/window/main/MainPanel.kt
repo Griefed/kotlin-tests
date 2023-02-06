@@ -8,6 +8,7 @@ import de.griefed.serverpackcreator.gui.window.settings.SettingsEditor
 import net.miginfocom.swing.MigLayout
 import javax.swing.JPanel
 import javax.swing.JScrollPane
+import javax.swing.JSeparator
 import javax.swing.JTabbedPane
 
 class MainPanel {
@@ -29,6 +30,7 @@ class MainPanel {
         panel.add(tabs,"grow,push")
         panel.add(larsonScanner,"height 40!,growx, south")
         panel.add(controlPanel.panel,"height 160!,growx, south")
+        panel.add(JSeparator(JSeparator.HORIZONTAL),"south")
         scroll.verticalScrollBar.unitIncrement = 5
     }
 }

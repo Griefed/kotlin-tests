@@ -20,7 +20,6 @@ class ControlPanel {
             "0[200!]0[grow]0",
             "0[75!,bottom]10[75!,top]0"
         )
-        panel.border = CompoundBorder(EtchedBorder(), EmptyBorder(5, 0, 0, 0))
         panel.add(generate,"cell 0 0 1 1,grow,height 50!,width 150!,align center")
         panel.add(serverPacks,"cell 0 1 1 1,grow,height 50!,width 150!,align center")
         panel.add(statusPanel.panel,"cell 1 0 1 2,grow,push, h 160!")
