@@ -8,20 +8,16 @@ import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
 import javax.swing.border.EtchedBorder
 
-class PluginsSettings {
-    val panel = JPanel()
+class PluginsSettings : JPanel(MigLayout(
+    "left,wrap",
+    "0[left,grow,push]0", "30"
+)) {
 
     init {
-        panel.layout = MigLayout(
-            "left,wrap",
-            "0[left,grow,push]0", "30"
-        )
-
         for (plugin in 0..5) {
-            panel.add(createPanel("Plugin $plugin"), "cell 0 $plugin,grow")
+            add(createPanel("Plugin $plugin"), "cell 0 $plugin,grow")
         }
-
-        panel.isVisible = false
+        isVisible = false
     }
 
     private fun createLabel(text: String): JLabel {

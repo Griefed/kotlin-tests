@@ -17,6 +17,7 @@ import javax.swing.border.TitledBorder
  */
 class CollapsiblePanel(
     private var title: String = "Collapsible Panel",
+    private val panel: JPanel,
     private var border: TitledBorder = BorderFactory.createTitledBorder(title)
 ) : JPanel() {
 
@@ -42,12 +43,6 @@ class CollapsiblePanel(
         override fun componentHidden(e: ComponentEvent) {
             updateBorderTitle()
         }
-    }
-
-    init {
-        setBorder(border)
-        layout = BorderLayout()
-        addMouseListener(titleListener)
     }
 
     override fun add(comp: Component): Component {
@@ -124,5 +119,12 @@ class CollapsiblePanel(
             }
         }
         return false
+    }
+
+    init {
+        setBorder(border)
+        layout = BorderLayout()
+        addMouseListener(titleListener)
+        add(panel)
     }
 }
