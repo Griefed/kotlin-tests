@@ -1,7 +1,7 @@
 package de.griefed.serverpackcreator.gui.window.main
 
 import de.griefed.larsonscanner.LarsonScanner
-import de.griefed.serverpackcreator.gui.window.configs.Configs
+import de.griefed.serverpackcreator.gui.window.configs.ConfigsTab
 import de.griefed.serverpackcreator.gui.window.logs.Logs
 import de.griefed.serverpackcreator.gui.window.main.control.ControlPanel
 import de.griefed.serverpackcreator.gui.window.settings.SettingsEditor
@@ -19,7 +19,7 @@ class MainPanel {
     val controlPanel = ControlPanel()
 
     init {
-        tabs.addTab("Configs", Configs().panel)
+        tabs.addTab("Configs", ConfigsTab().panel)
         tabs.addTab("Logs", Logs().panel)
         tabs.addTab("Settings", SettingsEditor().panel)
         panel.layout = MigLayout(

@@ -10,21 +10,13 @@ import javax.swing.event.TreeSelectionListener
 import javax.swing.tree.DefaultMutableTreeNode
 
 class FileSelectionListener(
-    frame: FileBrowserFrame,
-    model: FileBrowserModel
+    private val frame: FileBrowserFrame,
+    private val browserModel: FileBrowserModel
 ) : TreeSelectionListener {
-    private val frame: FileBrowserFrame
-    private val model: FileBrowserModel
-
-    init {
-        this.frame = frame
-        this.model = model
-    }
-
     override fun valueChanged(event: TreeSelectionEvent) {
         val node: DefaultMutableTreeNode = event.path.lastPathComponent as DefaultMutableTreeNode
         val fileNode: FileNode = node.userObject as FileNode
-        val addNodes = AddNodes(model, node)
+        val addNodes = AddNodes(browserModel, node)
         Thread(addNodes).start()
         val file: File = fileNode.file
         frame.updateFileDetail(fileNode)

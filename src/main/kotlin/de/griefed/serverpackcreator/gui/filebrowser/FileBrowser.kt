@@ -1,33 +1,22 @@
 package de.griefed.serverpackcreator.gui.filebrowser
 
-import com.formdev.flatlaf.FlatLaf
-import com.formdev.flatlaf.fonts.jetbrains_mono.FlatJetBrainsMonoFont
-import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme
 import de.griefed.serverpackcreator.gui.filebrowser.model.FileBrowserModel
 import de.griefed.serverpackcreator.gui.filebrowser.view.FileBrowserFrame
-import javax.swing.JTextField
+import de.griefed.serverpackcreator.gui.window.configs.ConfigsTab
 
-class FileBrowser(
-    private val field: JTextField
-) : Runnable {
-    private val model: FileBrowserModel
-
-    init {
-        FlatJetBrainsMonoFont.install()
-        FlatLaf.setPreferredFontFamily(FlatJetBrainsMonoFont.FAMILY)
-        try {
-            FlatDarkPurpleIJTheme.setup()
-        } catch (weTried: Exception) {
-            weTried.printStackTrace()
-        }
-        model = FileBrowserModel()
-    }
+class FileBrowser(configsTab: ConfigsTab) {
+    private val browserModel: FileBrowserModel = FileBrowserModel()
+    private val frame: FileBrowserFrame = FileBrowserFrame(browserModel, configsTab)
 
     fun reload() {
-        model.reload()
+        browserModel.reload()
     }
 
-    override fun run() {
-        FileBrowserFrame(model, field)
+    fun show() {
+        frame.show()
+    }
+
+    fun hide() {
+        frame.hide()
     }
 }

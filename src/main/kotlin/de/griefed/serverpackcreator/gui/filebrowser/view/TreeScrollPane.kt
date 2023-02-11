@@ -5,35 +5,34 @@ import de.griefed.serverpackcreator.gui.filebrowser.controller.TreeExpandListene
 import de.griefed.serverpackcreator.gui.filebrowser.controller.TreeMouseListener
 import de.griefed.serverpackcreator.gui.filebrowser.model.FileBrowserModel
 import de.griefed.serverpackcreator.gui.filebrowser.view.renderer.FileTreeCellRenderer
+import de.griefed.serverpackcreator.gui.window.configs.ConfigsTab
 import java.awt.Dimension
-import java.io.File
 import javax.swing.JScrollPane
-import javax.swing.JTextField
 import javax.swing.JTree
 import javax.swing.text.Position
 import javax.swing.tree.TreePath
 
 class TreeScrollPane(
     frame: FileBrowserFrame,
-    private val model: FileBrowserModel,
-    private val field: JTextField
+    private val browserModel: FileBrowserModel,
+    private val configsTab: ConfigsTab
 ) {
     private val slashRegex: Regex = "/".toRegex()
-    var tree: JTree = JTree(this.model.model)
+    var tree: JTree = JTree(this.browserModel.treeModel)
     var scrollPane: JScrollPane
 
     init {
         tree.addTreeSelectionListener(
-            FileSelectionListener(frame, this.model)
+            FileSelectionListener(frame, this.browserModel)
         )
         tree.addTreeWillExpandListener(
-            TreeExpandListener(this.model)
+            TreeExpandListener(this.browserModel)
         )
         tree.expandRow(1)
         tree.isRootVisible = true
-        tree.cellRenderer = FileTreeCellRenderer(this.model)
+        tree.cellRenderer = FileTreeCellRenderer(this.browserModel)
         tree.showsRootHandles = true
-        tree.addMouseListener(TreeMouseListener(tree, field))
+        tree.addMouseListener(TreeMouseListener(tree, configsTab))
         scrollPane = JScrollPane(tree)
         val preferredSize: Dimension = scrollPane.preferredSize
         val widePreferred = Dimension(
@@ -44,9 +43,12 @@ class TreeScrollPane(
     }
 
     private fun expandPaths() {
-        if (field.text.isNotEmpty() && File(field.text).isDirectory) {
+        if (configsTab.activeTab != null
+            && configsTab.activeTab!!.modpackDirectory.file.isDirectory
+        ) {
             val prefixes: Array<String> =
-                field.text.replace("\\", "/").split(slashRegex).dropLastWhile { it.isEmpty() }
+                configsTab.activeTab!!.modpackDirectory.file.absolutePath.replace("\\", "/").split(slashRegex)
+                    .dropLastWhile { it.isEmpty() }
                     .toTypedArray()
             var path: TreePath? = null
             for (prefix in prefixes) {

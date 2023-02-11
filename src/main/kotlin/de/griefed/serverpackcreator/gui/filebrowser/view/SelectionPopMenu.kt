@@ -4,6 +4,7 @@ import de.griefed.serverpackcreator.gui.filebrowser.controller.action.ModpackDir
 import de.griefed.serverpackcreator.gui.filebrowser.controller.action.OpenAction
 import de.griefed.serverpackcreator.gui.filebrowser.controller.action.ServerIconAction
 import de.griefed.serverpackcreator.gui.filebrowser.controller.action.ServerPropertiesAction
+import de.griefed.serverpackcreator.gui.window.configs.ConfigsTab
 import java.awt.Component
 import java.awt.event.MouseAdapter
 import java.io.File
@@ -11,7 +12,7 @@ import javax.swing.JPopupMenu
 import javax.swing.JSeparator
 import javax.swing.JTextField
 
-open class SelectionPopMenu(textField: JTextField) : MouseAdapter() {
+open class SelectionPopMenu(configsTab: ConfigsTab) : MouseAdapter() {
     private val menu: JPopupMenu = JPopupMenu()
     private val directory: ModpackDirectoryAction
     private val icon: ServerIconAction
@@ -21,9 +22,9 @@ open class SelectionPopMenu(textField: JTextField) : MouseAdapter() {
     private val props: String = "properties"
 
     init {
-        directory = ModpackDirectoryAction(textField)
-        icon = ServerIconAction()
-        properties = ServerPropertiesAction()
+        directory = ModpackDirectoryAction(configsTab)
+        icon = ServerIconAction(configsTab)
+        properties = ServerPropertiesAction(configsTab)
         open = OpenAction()
         menu.add(open)
         menu.add(JSeparator())
@@ -47,12 +48,14 @@ open class SelectionPopMenu(textField: JTextField) : MouseAdapter() {
             return
         }
         if (file.isFile && file.name.lowercase().matches(imageRegex)) {
+            icon.setIcon(file)
             directory.isEnabled = false
             icon.isEnabled = true
             properties.isEnabled = false
             return
         }
         if (file.isFile && file.name.lowercase().endsWith(props)) {
+            properties.setProperties(file)
             directory.isEnabled = false
             icon.isEnabled = false
             properties.isEnabled = true

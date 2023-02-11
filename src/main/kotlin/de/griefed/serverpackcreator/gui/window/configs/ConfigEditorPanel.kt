@@ -4,76 +4,99 @@ import de.griefed.serverpackcreator.gui.window.components.*
 import de.griefed.serverpackcreator.gui.window.components.interactivetable.InteractiveTable
 import net.miginfocom.swing.MigLayout
 import java.awt.FlowLayout
+import java.awt.event.ActionListener
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.*
+import javax.swing.event.DocumentEvent
 
-class ConfigEditor(private val configs: Configs) : JPanel(
+class ConfigEditorPanel(private val configsTab: ConfigsTab, showBrowser: ActionListener) : JPanel(
     MigLayout(
         "left,wrap",
         "[left,::64]5[left]5[left,grow]5[left,::64]5[left,::64]", "30"
     )
 ) {
-    private val modpackInfo = JLabel(configs.infoIcon)
-    private val propertiesInfo = JLabel(configs.infoIcon)
-    private val serverInfo = JLabel(configs.infoIcon)
-    private val filesInfo = JLabel(configs.infoIcon)
-    private val suffixInfo = JLabel(configs.infoIcon)
-    private val minecraftInfo = JLabel(configs.infoIcon)
-    private val javaVersionInfo = JLabel(configs.infoIcon)
-    private val modloaderInfo = JLabel(configs.infoIcon)
-    private val modloaderVersionInfo = JLabel(configs.infoIcon)
-    private val includeIconInfo = JLabel(configs.infoIcon)
-    private val includeZIPInfo = JLabel(configs.infoIcon)
-    private val includePropertiesInfo = JLabel(configs.infoIcon)
-    private val includeServerInfo = JLabel(configs.infoIcon)
+    private val modpackInfo = JLabel(configsTab.infoIcon)
+    private val propertiesInfo = JLabel(configsTab.infoIcon)
+    private val serverInfo = JLabel(configsTab.infoIcon)
+    private val filesInfo = JLabel(configsTab.infoIcon)
+    private val suffixInfo = JLabel(configsTab.infoIcon)
+    private val minecraftInfo = JLabel(configsTab.infoIcon)
+    private val javaVersionInfo = JLabel(configsTab.infoIcon)
+    private val modloaderInfo = JLabel(configsTab.infoIcon)
+    private val modloaderVersionInfo = JLabel(configsTab.infoIcon)
+    private val includeIconInfo = JLabel(configsTab.infoIcon)
+    private val includeZIPInfo = JLabel(configsTab.infoIcon)
+    private val includePropertiesInfo = JLabel(configsTab.infoIcon)
+    private val includeServerInfo = JLabel(configsTab.infoIcon)
+    private val iconPreview = JLabel(configsTab.serverIcon)
+    private val modpackBrowser = JButton(configsTab.folderIcon)
+    private val modpackInspect = JButton(configsTab.inspectIcon)
+    private val propertiesBrowser = JButton(configsTab.folderIcon)
+    private val propertiesOpen = JButton(configsTab.openIcon)
+    private val iconBrowser = JButton(configsTab.folderIcon)
+    private val serverPackFilesRevert = JButton(configsTab.revertIcon)
+    private val serverPackFilesBrowser = JButton(configsTab.folderIcon)
+    private val serverPackFilesReset = JButton(configsTab.resetIcon)
+    private val javaVersion = ElementLabel("8", 16)
+    private val serverPackSuffix = JTextField("-4,0,0")
+    private val includeIcon = JCheckBox("Include Server Icon")
+    private val includeZip = JCheckBox("Create ZIP Archive")
+    private val includeProperties = JCheckBox("Include Server Properties")
+    private val prepareServer = JCheckBox("Prepare Local Server")
+    private val propertiesQuickSelect = JComboBox(DefaultComboBoxModel(arrayOf("server.properties")))
+    private val iconQuickSelect = JComboBox(DefaultComboBoxModel(arrayOf("server-icon.png")))
+    private val minecraftVersion = JComboBox(DefaultComboBoxModel(arrayOf("1.16.5", "1.18.2", "1.12.2")))
+    private val modloader = JComboBox(DefaultComboBoxModel(arrayOf("Forge", "Fabric", "Quilt", "LegacyFabric")))
+    private val modloaderVersion = JComboBox(DefaultComboBoxModel(arrayOf("1.2.3", "4.5.6")))
 
+    val exclusionsRevert = JButton(configsTab.revertIcon)
+    val exclusionsBrowser = JButton(configsTab.folderIcon)
+    val exclusionsReset = JButton(configsTab.resetIcon)
+    val scriptKVPairsRevert = JButton(configsTab.revertIcon)
+    val scriptKVPairsBrowser = JButton(configsTab.folderIcon)
+    val scriptKVPairsReset = JButton(configsTab.resetIcon)
+    val aikarsFlags = JButton()
     val modpackDirectory = FileTextField("C:\\Minecraft\\Game\\Instances\\Survive Create Prosper 4")
-    val modpackBrowser = JButton(configs.folderIcon)
-    val modpackInspect = JButton(configs.inspectIcon)
-    val propertiesFile = FileTextField("C:/Minecraft/ServerPackCreator/server_files/scp3.properties")
-    val propertiesQuickSelect = JComboBox(DefaultComboBoxModel(arrayOf("server.properties")))
-    val propertiesBrowser = JButton(configs.folderIcon)
-    val propertiesOpen = JButton(configs.openIcon)
-    val iconFile = FileTextField("C:/Minecraft/ServerPackCreator/server_files/server-icon.png")
-    val iconQuickSelect = JComboBox(DefaultComboBoxModel(arrayOf("server-icon.png")))
-    val iconBrowser = JButton(configs.folderIcon)
-    val iconPreview = JLabel(configs.serverIcon)
-    val serverPackFiles = ScrollTextArea("config, customnpcs, mods, scripts")
-    val serverPackFilesRevert = JButton(configs.revertIcon)
-    val serverPackFilesBrowser = JButton(configs.folderIcon)
-    val serverPackFilesReset = JButton(configs.resetIcon)
-    val serverPackSuffix = JTextField("-4,0,0")
-    val minecraftVersion = JComboBox(DefaultComboBoxModel(arrayOf("1.16.5", "1.18.2", "1.12.2")))
-    val javaVersion = ElementLabel("8", 16)
-    val modloader = JComboBox(DefaultComboBoxModel(arrayOf("Forge", "Fabric", "Quilt", "LegacyFabric")))
-    val modloaderVersion = JComboBox(DefaultComboBoxModel(arrayOf("1.2.3", "4.5.6")))
-    val includeIcon = JCheckBox("Include Server Icon")
-    val includeZip = JCheckBox("Create ZIP Archive")
-    val includeProperties = JCheckBox("Include Server Properties")
-    val prepareServer = JCheckBox("Prepare Local Server")
 
+    val propertiesFile = FileTextField("C:/Minecraft/ServerPackCreator/server_files/scp3.properties")
+    val iconFile = FileTextField("C:/Minecraft/ServerPackCreator/server_files/server-icon.png")
+    val serverPackFiles = ScrollTextArea("config, customnpcs, mods, scripts")
     val exclusions = ScrollTextArea(
         "^Armor Status HUD-.*\$, ^[1.12.2]bspkrscore-.*\$, ^[1.12.2]DamageIndicatorsMod-.*\$, ^3dskinlayers-.*\$, ^Absolutely-Not-A-Zoom-Mod-.*\$, ^AdvancedChat-.*\$, ^AdvancedCompas-.*\$, ^AdvancementPlaques-.*\$, ^Ambience.*\$, ^AmbientEnvironment-.*\$, ^AmbientSounds_.*\$, ^antighost-.*\$, ^anviltooltipmod-.*\$, ^appleskin-.*\$, ^armorchroma-.*\$, ^armorpointspp-.*\$, ^ArmorSoundTweak-.*\$, ^AromaBackup-.*\$, ^authme-.*\$, ^autobackup-.*\$, ^autoreconnect-.*\$, ^auto-reconnect-.*\$, ^axolotl-item-fix-.*\$, ^backtools-.*\$, ^Backups-.*\$, ^bannerunlimited-.*\$, ^Batty's Coordinates PLUS Mod.*\$, ^beenfo-1.19-.*\$, ^BetterAdvancements-.*\$, ^BetterAnimationsCollection-.*\$, ^betterbiomeblend-.*\$, ^BetterDarkMode-.*\$, ^BetterF3-.*\$, ^BetterFoliage-.*\$, ^BetterPingDisplay-.*\$, ^BetterPlacement-.*\$, ^better-recipe-book-.*\$, ^BetterTaskbar-.*\$, ^BetterThirdPerson.*\$, ^BetterTitleScreen-.*\$, ^bhmenu-.*\$, ^BH-Menu-.*\$, ^blur-.*\$, ^borderless-mining-.*\$, ^BorderlessWindow-.*\$, ^catalogue-.*\$, ^charmonium-.*\$, ^chat_heads-.*\$, ^cherishedworlds-.*\$, ^ChunkAnimator-.*\$, ^cirback-1.0-.*\$, ^classicbar-.*\$, ^clickadv-.*\$, ^clienttweaks-.*\$, ^ClientTweaks_.*\$, ^combat_music-.*\$, ^configured-.*\$, ^controllable-.*\$, ^Controller Support-.*\$, ^Controlling-.*\$, ^CraftPresence-.*\$, ^CTM-.*\$, ^cullleaves-.*\$, ^cullparticles-.*\$, ^custom-crosshair-mod-.*\$, ^CustomCursorMod-.*\$, ^customdiscordrpc-.*\$, ^CustomMainMenu-.*\$, ^darkness-.*\$, ^dashloader-.*\$, ^defaultoptions-.*\$, ^DefaultOptions_.*\$, ^DefaultSettings-.*\$, ^DeleteWorldsToTrash-.*\$, ^desiredservers-.*\$, ^DetailArmorBar-.*\$, ^Ding-.*\$, ^discordrpc-.*\$, ^DistantHorizons-.*\$, ^drippyloadingscreen-.*\$, ^drippyloadingscreen_.*\$, ^DripSounds-.*\$, ^Durability101-.*\$, ^DurabilityNotifier-.*\$, ^dynamic-fps-.*\$, ^dynamiclights-.*\$, ^dynamic-music-.*\$, ^DynamicSurroundings-.*\$, ^DynamicSurroundingsHuds-.*\$, ^dynmus-.*\$, ^effective-.*\$, ^EffectsLeft-.*\$, ^eggtab-.*\$, ^eguilib-.*\$, ^eiramoticons-.*\$, ^EiraMoticons_.*\$, ^EnchantmentDescriptions-.*\$, ^enchantment-lore-.*\$, ^EnhancedVisuals_.*\$, ^entityculling-.*\$, ^entity-texture-features-.*\$, ^EquipmentCompare-.*\$, ^exhaustedstamina-.*\$, ^extremesoundmuffler-.*\$, ^FabricCustomCursorMod-.*\$, ^fabricemotes-.*\$, ^Fallingleaves-.*\$, ^fancymenu_.*\$, ^fancymenu_video_extension.*\$, ^FancySpawnEggs.*\$, ^FancyVideo-API-.*\$, ^findme-.*\$, ^FirstPersonMod.*\$, ^flickerfix-.*\$, ^fm_audio_extension_.*\$, ^FogTweaker-.*\$, ^ForgeCustomCursorMod-.*\$, ^forgemod_VoxelMap-.*\$, ^FPS-Monitor-.*\$, ^FpsReducer-.*\$, ^FpsReducer2-.*\$, ^freelook-.*\$, ^ftb-backups-.*\$, ^ftbbackups2-.*\$, ^FullscreenWindowed-.*\$, ^galacticraft-rpc-.*\$, ^GameMenuModOption-.*\$, ^gamestagesviewer-.*\$, ^grid-.*\$, ^HealthOverlay-.*\$, ^hiddenrecipebook_.*\$, ^HorseStatsMod-.*\$, ^infinitemusic-.*\$, ^InventoryEssentials_.*\$, ^InventoryHud_[1.17.1].forge-.*\$, ^inventoryprofiles.*\$, ^InventorySpam-.*\$, ^InventoryTweaks-.*\$, ^invtweaks-.*\$, ^ItemBorders-.*\$, ^ItemPhysicLite_.*\$, ^ItemStitchingFix-.*\$, ^itemzoom.*\$, ^itlt-.*\$, ^JBRA-Client-.*\$, ^jeed-.*\$, ^jehc-.*\$, ^jeiintegration_.*\$, ^justenoughbeacons-.*\$, ^JustEnoughCalculation-.*\$, ^justenoughdrags-.*\$, ^JustEnoughEffects-.*\$, ^just-enough-harvestcraft-.*\$, ^JustEnoughProfessions-.*\$, ^JustEnoughResources-.*\$, ^justzoom_.*\$, ^keymap-.*\$, ^keywizard-.*\$, ^konkrete_.*\$, ^konkrete_forge_.*\$, ^lazydfu-.*\$, ^LegendaryTooltips.*\$, ^LegendaryTooltips-.*\$, ^lightfallclient-.*\$, ^LightOverlay-.*\$, ^light-overlay-.*\$, ^LLOverlayReloaded-.*\$, ^loadmyresources_.*\$, ^lock_minecart_view-.*\$, ^lootbeams-.*\$, ^LOTRDRP-.*\$, ^lwl-.*\$, ^magnesium_extras-.*\$, ^maptooltip-.*\$, ^massunbind.*\$, ^mcbindtype-.*\$, ^mcwifipnp-.*\$, ^medievalmusic-.*\$, ^mightyarchitect-.*\$, ^mindful-eating-.*\$, ^minetogether-.*\$, ^MoBends.*\$, ^mobplusplus-.*\$, ^modcredits-.*\$, ^modernworldcreation_.*\$, ^modmenu-.*\$, ^modnametooltip-.*\$, ^modnametooltip_.*\$, ^moreoverlays-.*\$, ^MouseTweaks-.*\$, ^mousewheelie-.*\$, ^movement-vision-.*\$, ^multihotbar-.*\$, ^musicdr-.*\$, ^music-duration-reducer-.*\$, ^MyServerIsCompatible-.*\$, ^Neat-.*\$, ^Neat .*\$, ^neiRecipeHandlers-.*\$, ^NekosEnchantedBooks-.*\$, ^ngrok-lan-expose-mod-.*\$, ^NoAutoJump-.*\$, ^NoFog-.*\$, ^nopotionshift_.*\$, ^notenoughanimations-.*\$, ^Notes-.*\$, ^NotifMod-.*\$, ^oculus-.*\$, ^OldJavaWarning-.*\$, ^openbackup-.*\$, ^OptiFine.*\$, ^OptiForge.*\$, ^OptiForge-.*\$, ^ornaments-.*\$, ^overloadedarmorbar-.*\$, ^PackMenu-.*\$, ^PackModeMenu-.*\$, ^panorama-.*\$, ^paperdoll-.*\$, ^phosphor-.*\$, ^PickUpNotifier-.*\$, ^Ping-.*\$, ^preciseblockplacing-.*\$, ^PresenceFootsteps-.*\$, ^realm-of-lost-souls-.*\$, ^ReAuth-.*\$, ^rebrand-.*\$, ^replanter-.*\$, ^ResourceLoader-.*\$, ^ResourcePackOrganizer.*\$, ^RPG-HUD-.*\$, ^rubidium-.*\$, ^rubidium_extras-.*\$, ^screenshot-to-clipboard-.*\$, ^ShoulderSurfing-.*\$, ^ShulkerTooltip-.*\$, ^shutupexperimentalsettings-.*\$, ^shutupmodelloader-.*\$, ^signtools-.*\$, ^simpleautorun-.*\$, ^simplebackup-.*\$, ^SimpleBackups-.*\$, ^SimpleDiscordRichPresence-.*\$, ^simple-rpc-.*\$, ^SimpleWorldTimer-.*\$, ^smartcursor-.*\$, ^smoothboot-.*\$, ^smoothfocus-.*\$, ^sounddeviceoptions-.*\$, ^SoundFilters-.*\$, ^soundreloader-.*\$, ^SpawnerFix-.*\$, ^spoticraft-.*\$, ^tconplanner-.*\$, ^textile_backup-.*\$, ^timestamps-.*\$, ^Tips-.*\$, ^TipTheScales-.*\$, ^Toast Control-.*\$, ^ToastControl-.*\$, ^Toast-Control-.*\$, ^tooltipscroller-.*\$, ^torchoptimizer-.*\$, ^torohealth-.*\$, ^totaldarkness.*\$, ^toughnessbar-.*\$, ^TRansliterationLib-.*\$, ^TravelersTitles-.*\$, ^VoidFog-.*\$, ^WindowedFullscreen-.*\$, ^wisla-.*\$, ^WorldNameRandomizer-.*\$, ^xlifeheartcolors-.*\$, ^yisthereautojump-.*\$"
     )
-    val exclusionsRevert = JButton(configs.revertIcon)
-    val exclusionsBrowser = JButton(configs.folderIcon)
-    val exclusionsReset = JButton(configs.resetIcon)
     val startArgs =
         ScrollTextArea("-Xms8G -Xmx8G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true")
-    val aikarsFlags = JButton()
     val scriptKVPairs = InteractiveTable()
-    val scriptKVPairsRevert = JButton(configs.revertIcon)
-    val scriptKVPairsBrowser = JButton(configs.folderIcon)
-    val scriptKVPairsReset = JButton(configs.resetIcon)
 
-    val advancedSettings = AdvancedSettings(configs, this)
-    val pluginsSettings = PluginsSettings()
-    val collapsibleAdvanced = CollapsiblePanel("Advanced Settings", advancedSettings)
-    val collapsiblePlugins = CollapsiblePanel("Plugins", pluginsSettings)
+    private val advancedSettingsPanel = AdvancedSettingsPanel(configsTab, this)
+    private val pluginsSettingsPanel = PluginsSettingsPanel()
+    private val collapsibleAdvanced = CollapsiblePanel("Advanced Settings", advancedSettingsPanel)
+    private val collapsiblePlugins = CollapsiblePanel("Plugins", pluginsSettingsPanel)
+    //TODO when modpack dir changes, update title
+    private val modpackChanges = object : DocumentChangeListener {
+        override fun update(e: DocumentEvent) {
+            title.titleLabel.text = modpackDirectory.file.name
+            if (modpackDirectory.file.isDirectory) {
+                modpackInfo.icon = configsTab.infoIcon
+            } else {
+                modpackInfo.icon = configsTab.errorIcon
+            }
+        }
+
+    }
+
     val title: Title
 
     init {
+        modpackBrowser.addActionListener(showBrowser)
+        propertiesBrowser.addActionListener(showBrowser)
+        iconBrowser.addActionListener(showBrowser)
+        serverPackFilesBrowser.addActionListener(showBrowser)
+        exclusionsBrowser.addActionListener(showBrowser)
+        scriptKVPairsBrowser.addActionListener(showBrowser)
+
+        modpackDirectory.document.addDocumentListener(modpackChanges)
 
         // Modpack directory
         add(modpackInfo, "cell 0 0,grow")
@@ -160,12 +183,13 @@ class ConfigEditor(private val configs: Configs) : JPanel(
         add(collapsiblePlugins, "cell 0 11 5,grow")
 
         title = Title()
+
     }
 
     inner class Title : JPanel(FlowLayout(FlowLayout.LEFT, 0, 0)) {
 
         val titleLabel = JLabel(modpackDirectory.file.name)
-        val closeButton = JButton(configs.closeIcon)
+        val closeButton = JButton(configsTab.closeIcon)
 
         init {
             isOpaque = false
@@ -173,11 +197,11 @@ class ConfigEditor(private val configs: Configs) : JPanel(
             add(titleLabel)
             closeButton.addMouseListener(object : MouseAdapter() {
                 override fun mouseClicked(e: MouseEvent?) {
-                    val currentTab = configs.tabs.selectedIndex
-                    configs.tabs.remove(this@ConfigEditor)
+                    val currentTab = configsTab.tabs.selectedIndex
+                    configsTab.tabs.remove(this@ConfigEditorPanel)
 
                     if (currentTab - 1 > 0) {
-                        configs.tabs.selectedIndex = currentTab - 1
+                        configsTab.tabs.selectedIndex = currentTab - 1
                     }
                 }
             })

@@ -23,14 +23,17 @@ import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 
 interface DocumentChangeListener : DocumentListener {
+    fun update(e: DocumentEvent)
+
     override fun insertUpdate(e: DocumentEvent) {
         update(e)
     }
 
-    fun update(e: DocumentEvent)
     override fun removeUpdate(e: DocumentEvent) {
         update(e)
     }
 
-    override fun changedUpdate(e: DocumentEvent) {}
+    override fun changedUpdate(e: DocumentEvent) {
+        update(e)
+    }
 }

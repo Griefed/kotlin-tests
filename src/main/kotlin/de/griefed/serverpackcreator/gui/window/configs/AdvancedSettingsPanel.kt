@@ -5,16 +5,16 @@ import net.miginfocom.swing.MigLayout
 import javax.swing.JLabel
 import javax.swing.JPanel
 
-class AdvancedSettings(configs: Configs, editor: ConfigEditor) : JPanel(
+class AdvancedSettingsPanel(configsTab: ConfigsTab, editor: ConfigEditorPanel) : JPanel(
     MigLayout(
         "left,wrap",
         "[left,::64]5[left]5[left,grow]5[left,::64]5[left,::64]", "30"
     )
 ) {
 
-    private val exclusionsInfo = JLabel(configs.infoIcon)
-    private val argumentsInfo = JLabel(configs.infoIcon)
-    private val scriptInfo = JLabel(configs.infoIcon)
+    private val exclusionsInfo = JLabel(configsTab.infoIcon)
+    private val argumentsInfo = JLabel(configsTab.infoIcon)
+    private val scriptInfo = JLabel(configsTab.infoIcon)
 
     init {
         // Mod Exclusions

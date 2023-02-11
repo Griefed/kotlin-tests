@@ -4,19 +4,11 @@ import de.griefed.serverpackcreator.gui.filebrowser.model.FileBrowserModel
 import de.griefed.serverpackcreator.gui.filebrowser.model.FileNode
 import javax.swing.tree.DefaultMutableTreeNode
 
-class AddNodes(model: FileBrowserModel, node: DefaultMutableTreeNode) : Runnable {
-    private val node: DefaultMutableTreeNode
-    private val model: FileBrowserModel
-
-    init {
-        this.model = model
-        this.node = node
-    }
-
+class AddNodes(private val browserModel: FileBrowserModel, private val node: DefaultMutableTreeNode) : Runnable {
     override fun run() {
         val fileNode: FileNode = node.userObject as FileNode
         if (fileNode.isGenerateGrandchildren) {
-            model.addGrandchildNodes(node)
+            browserModel.addGrandchildNodes(node)
             fileNode.isGenerateGrandchildren = false
         }
     }

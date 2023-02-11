@@ -9,13 +9,10 @@ import javax.swing.JTree
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreeCellRenderer
 
-class FileTreeCellRenderer(model: FileBrowserModel) : TreeCellRenderer {
-    private val model: FileBrowserModel
-    private val label: JLabel
+class FileTreeCellRenderer(private val browserModel: FileBrowserModel) : TreeCellRenderer {
+    private val label: JLabel = JLabel(" ")
 
     init {
-        this.model = model
-        label = JLabel(" ")
         label.isOpaque = true
     }
 
@@ -31,8 +28,8 @@ class FileTreeCellRenderer(model: FileBrowserModel) : TreeCellRenderer {
         val node: DefaultMutableTreeNode = value as DefaultMutableTreeNode
         val fileNode: FileNode = node.userObject as FileNode
         val file: File = fileNode.file
-        label.icon = model.getFileIcon(file)
-        label.text = model.getFileText(file)
+        label.icon = browserModel.getFileIcon(file)
+        label.text = browserModel.getFileText(file)
         return label
     }
 }

@@ -2,38 +2,38 @@ package de.griefed.serverpackcreator.gui.filebrowser.view
 
 import de.griefed.serverpackcreator.gui.filebrowser.model.FileBrowserModel
 import de.griefed.serverpackcreator.gui.filebrowser.model.FileNode
+import de.griefed.serverpackcreator.gui.window.configs.ConfigsTab
 import java.awt.BorderLayout
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import javax.swing.JFrame
 import javax.swing.JPanel
 import javax.swing.JSplitPane
-import javax.swing.JTextField
 import javax.swing.tree.DefaultMutableTreeNode
 
 class FileBrowserFrame(
-    private val model: FileBrowserModel,
-    field: JTextField
+    private val browserModel: FileBrowserModel,
+    private val configsTab: ConfigsTab
 ) {
-    private var desktopButtonPanel: DesktopButtonPanel
+    private var filePreviewPanel: FilePreviewPanel
     private var fileDetailPanel: FileDetailPanel
     private var frame: JFrame = JFrame()
-    private var splitPane: JSplitPane
+    private var splitTreeTable: JSplitPane
     private var tableScrollPane: TableScrollPane
 
     init {
         frame.title = "File Browser"
-        frame.defaultCloseOperation = JFrame.DO_NOTHING_ON_CLOSE
+        frame.defaultCloseOperation = JFrame.HIDE_ON_CLOSE
         frame.addWindowListener(object : WindowAdapter() {
             override fun windowClosing(event: WindowEvent) {
                 frame.isVisible = false
             }
         })
-        val rightPanel = JPanel()
-        rightPanel.layout = BorderLayout()
-        tableScrollPane = TableScrollPane(this, model, field)
+        val northPanel = JPanel()
+        northPanel.layout = BorderLayout()
+        tableScrollPane = TableScrollPane(this, browserModel, configsTab)
         tableScrollPane.panel.let {
-            rightPanel.add(
+            northPanel.add(
                 it,
                 BorderLayout.CENTER
             )
@@ -41,30 +41,35 @@ class FileBrowserFrame(
         val southPanel = JPanel()
         southPanel.layout = BorderLayout()
         fileDetailPanel = FileDetailPanel()
-        fileDetailPanel.panel.let { southPanel.add(it, BorderLayout.NORTH) }
-        desktopButtonPanel = DesktopButtonPanel(field)
+        fileDetailPanel.panel.let { southPanel.add(it, BorderLayout.PAGE_START) }
+        filePreviewPanel = FilePreviewPanel(configsTab)
         southPanel.add(
-            desktopButtonPanel.panel,
-            BorderLayout.SOUTH
+            filePreviewPanel.panel,
+            BorderLayout.CENTER
         )
-        rightPanel.add(southPanel, BorderLayout.SOUTH)
-        val treeScrollPane = TreeScrollPane(this, model, field)
-        splitPane = JSplitPane(
+
+        val tablePreviewSplit = JSplitPane(JSplitPane.VERTICAL_SPLIT,northPanel,southPanel)
+        tablePreviewSplit.isOneTouchExpandable = true
+        tablePreviewSplit.dividerLocation = 200
+        tablePreviewSplit.dividerSize = 20
+
+        val treeScrollPane = TreeScrollPane(this, browserModel, configsTab)
+        splitTreeTable = JSplitPane(
             JSplitPane.HORIZONTAL_SPLIT,
             treeScrollPane.scrollPane,
-            rightPanel
+            tablePreviewSplit
         )
-        splitPane.isOneTouchExpandable = true
-        splitPane.dividerLocation = 300
-        splitPane.dividerSize = 20
-        frame.add(splitPane)
+        splitTreeTable.isOneTouchExpandable = true
+        splitTreeTable.dividerLocation = 300
+        splitTreeTable.dividerSize = 20
+        frame.add(splitTreeTable)
         frame.pack()
         frame.isLocationByPlatform = true
-        frame.isVisible = true
+        frame.isAutoRequestFocus = true
     }
 
     fun updateFileDetail(fileNode: FileNode?) {
-        fileDetailPanel.setFileNode(fileNode, model)
+        fileDetailPanel.setFileNode(fileNode, browserModel)
     }
 
     fun setDefaultTableModel(node: DefaultMutableTreeNode) {
@@ -76,6 +81,16 @@ class FileBrowserFrame(
     }
 
     fun setDesktopButtonFileNode(fileNode: FileNode?) {
-        fileNode?.let { desktopButtonPanel.setFileNode(it) }
+        fileNode?.let { filePreviewPanel.setFileNode(it) }
+    }
+
+    fun show() {
+        frame.setLocationRelativeTo(configsTab.panel)
+        frame.isVisible = true
+        frame.toFront()
+    }
+
+    fun hide() {
+        frame.isVisible = false
     }
 }

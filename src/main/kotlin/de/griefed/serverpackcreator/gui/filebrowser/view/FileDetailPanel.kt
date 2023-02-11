@@ -76,7 +76,7 @@ class FileDetailPanel {
         container.add(component, gbc)
     }
 
-    private fun updatePartControl(model: FileBrowserModel) {
+    private fun updatePartControl(browserModel: FileBrowserModel) {
         if (fileNode != null) {
             val file: File = fileNode!!.file
             if (file.isDirectory) {
@@ -85,7 +85,7 @@ class FileDetailPanel {
                 fileNameTextLabel.text = "File:"
             }
             fileNameLabel.text = file.name
-            fileNameLabel.icon = model.getFileIcon(file)
+            fileNameLabel.icon = browserModel.getFileIcon(file)
             filePathField.text = file.absolutePath
             filePathField.caretPosition = 0
             lastModifiedLabel.text = generateLastModified(file)
@@ -112,8 +112,8 @@ class FileDetailPanel {
         return String.format("%.3f ", dbytes) + label[count]
     }
 
-    fun setFileNode(fileNode: FileNode?, model: FileBrowserModel) {
+    fun setFileNode(fileNode: FileNode?, browserModel: FileBrowserModel) {
         this.fileNode = fileNode
-        updatePartControl(model)
+        updatePartControl(browserModel)
     }
 }

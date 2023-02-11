@@ -1,10 +1,11 @@
 package de.griefed.serverpackcreator.gui.filebrowser.controller.action
 
+import de.griefed.serverpackcreator.gui.window.configs.ConfigsTab
 import java.awt.event.ActionEvent
 import java.io.File
 import javax.swing.AbstractAction
 
-class ServerIconAction : AbstractAction() {
+class ServerIconAction(private val configsTab: ConfigsTab) : AbstractAction() {
     private var icon: File? = null
 
     init {
@@ -18,6 +19,7 @@ class ServerIconAction : AbstractAction() {
      */
     @Suppress("unused")
     override fun actionPerformed(e: ActionEvent) {
+        configsTab.activeTab!!.iconFile.file = icon!!.absoluteFile
     }
 
     fun setIcon(file: File?) {

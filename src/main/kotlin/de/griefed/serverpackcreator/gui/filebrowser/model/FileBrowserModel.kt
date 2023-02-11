@@ -8,10 +8,10 @@ import javax.swing.tree.DefaultTreeModel
 
 class FileBrowserModel {
     private val rootManager: RootManager = RootManager()
-    val model: DefaultTreeModel = createTreeModel()
+    val treeModel: DefaultTreeModel = createTreeModel()
 
     fun reload() {
-        model.setRoot(updateRoot())
+        treeModel.setRoot(updateRoot())
     }
 
     private fun createTreeModel(): DefaultTreeModel {

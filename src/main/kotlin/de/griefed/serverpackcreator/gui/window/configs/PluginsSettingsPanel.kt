@@ -8,7 +8,7 @@ import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
 import javax.swing.border.EtchedBorder
 
-class PluginsSettings : JPanel(MigLayout(
+class PluginsSettingsPanel : JPanel(MigLayout(
     "left,wrap",
     "0[left,grow,push]0", "30"
 )) {

@@ -48,11 +48,11 @@ class FileTableModel : AbstractTableModel() {
         return columns[column]
     }
 
-    fun addRow(model: FileBrowserModel, fileNode: FileNode) {
+    fun addRow(browserModel: FileBrowserModel, fileNode: FileNode) {
         val file = fileNode.file
         val list: MutableList<Any> = ArrayList()
-        list.add(model.getFileIcon(file))
-        list.add(model.getFileText(file))
+        list.add(browserModel.getFileIcon(file))
+        list.add(browserModel.getFileText(file))
         list.add(file.length())
         list.add(Date(file.lastModified()))
         list.add(file.canRead())
